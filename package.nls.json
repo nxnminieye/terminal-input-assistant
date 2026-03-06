@@ -1,0 +1,23 @@
+{
+  "extension.description": "Safe input buffer for complex CLI tools in integrated terminal. Solves CJK garbled text and backspace misalignment.",
+  "command.focus": "Terminal Input Assistant: Focus Input Panel",
+  "config.title": "Terminal Input Assistant",
+  "config.clearAfterSend": "Automatically clear input box after sending",
+  "views.panel.name": "Input Assistant",
+  "webview.htmlLang": "en",
+  "webview.htmlTitle": "Input Assistant",
+  "webview.followActive": "⚡ Follow Active Terminal",
+  "webview.selectTitle": "Select target terminal",
+  "webview.lockUnlockTitle": "Lock/Unlock terminal",
+  "webview.placeholder": "Type here, Ctrl+Enter to send with Enter...",
+  "webview.sendEnterBtn": "Send+Enter (Ctrl+Enter)",
+  "webview.sendBtn": "Send",
+  "webview.addHistoryBtn": "Add to History",
+  "webview.historyHeader": "History",
+  "webview.statusSent": "Sent ✓",
+  "webview.statusAdded": "Added to history ✓",
+  "webview.statusEmpty": "Input is empty",
+  "webview.statusNoTerminal": "No terminal available, please open one first",
+  "webview.lockTitle": "Click to lock to current terminal",
+  "webview.unlockTitle": "Click to unlock, resume following active terminal"
+}

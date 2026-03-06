@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import { InputPanelProvider } from './panel/InputPanelProvider';
 import { TerminalManager } from './terminal/TerminalManager';
+import { loadI18n } from './i18n';
 
 export function activate(context: vscode.ExtensionContext): void {
+  loadI18n(context.extensionPath);
+
   const terminalManager = new TerminalManager();
   const provider = new InputPanelProvider(context.extensionUri, terminalManager);
 

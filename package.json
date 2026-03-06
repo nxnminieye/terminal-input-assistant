@@ -1,9 +1,10 @@
 {
   "name": "terminal-input-assistant",
   "displayName": "Terminal Input Assistant | 终端输入助手",
-  "description": "Safe input buffer for complex CLI tools in integrated terminal. 终端安全输入缓冲区，解决交互式 CLI 工具中文乱码与退格错位问题。",
+  "description": "%extension.description%",
   "version": "0.2.0",
-  "publisher": "local",
+  "publisher": "TerminalInputAssistant",
+  "icon": "media/logo.svg",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -17,7 +18,7 @@
         {
           "type": "webview",
           "id": "imeInput.panel",
-          "name": "输入助手",
+          "name": "%views.panel.name%",
           "visibility": "visible"
         }
       ]
@@ -25,7 +26,7 @@
     "commands": [
       {
         "command": "imeInput.focus",
-        "title": "中文输入助手: 聚焦输入面板"
+        "title": "%command.focus%"
       }
     ],
     "keybindings": [
@@ -36,12 +37,12 @@
       }
     ],
     "configuration": {
-      "title": "中文输入助手",
+      "title": "%config.title%",
       "properties": {
         "imeInput.clearAfterSend": {
           "type": "boolean",
           "default": true,
-          "description": "发送后自动清空输入框"
+          "description": "%config.clearAfterSend%"
         }
       }
     }

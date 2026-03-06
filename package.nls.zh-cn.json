@@ -1,0 +1,23 @@
+{
+  "extension.description": "终端安全输入缓冲区，解决交互式 CLI 工具中文乱码与退格错位问题。",
+  "command.focus": "中文输入助手: 聚焦输入面板",
+  "config.title": "终端输入助手",
+  "config.clearAfterSend": "发送成功后自动清空输入框",
+  "views.panel.name": "输入助手",
+  "webview.htmlLang": "zh-CN",
+  "webview.htmlTitle": "中文输入助手",
+  "webview.followActive": "⚡ 跟随活动终端",
+  "webview.selectTitle": "选择目标终端",
+  "webview.lockUnlockTitle": "锁定/解锁终端",
+  "webview.placeholder": "在此输入中文，Ctrl+Enter 发送+回车...",
+  "webview.sendEnterBtn": "发送+回车 (Ctrl+Enter)",
+  "webview.sendBtn": "发送",
+  "webview.addHistoryBtn": "加入历史",
+  "webview.historyHeader": "历史记录",
+  "webview.statusSent": "已发送 ✓",
+  "webview.statusAdded": "已加入历史 ✓",
+  "webview.statusEmpty": "输入内容为空",
+  "webview.statusNoTerminal": "没有可用的终端，请先打开一个终端",
+  "webview.lockTitle": "点击锁定到当前终端",
+  "webview.unlockTitle": "点击解锁，恢复跟随活动终端"
+}

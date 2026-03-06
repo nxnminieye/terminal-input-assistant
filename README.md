@@ -1,6 +1,6 @@
 # Terminal Input Assistant | 终端输入助手
 
-[English](#english) | [简体中文](#简体中文)
+[English](#english) | [简体中文](#zh-cn)
 
 <br>
 <hr>
@@ -34,7 +34,7 @@ You perform all complex editing (typing, selecting IME candidates, backspacing, 
 *   **🎯 Smart Tracking**: Automatically follows your active terminal tab or split pane.
 *   **🔒 Lock Target**: Pin the input to a specific terminal so you can type even while focused elsewhere.
 *   **📜 History Management**: Automatically records successful inputs. Click any history item to quickly re-send it, perfect for repetitive commands.
-*   **⌨️ Quick Actions**: Use `Ctrl+Enter` to send text quickly, and `Ctrl+Shift+I` to summon the panel.
+*   **⌨️ Quick Actions**: Use `Ctrl+Enter` to send text with a newline, and `Ctrl+Shift+I` to summon the panel.
 *   **💻 Perfect for Remote-SSH**: Runs purely on your local Extension Host. No installation needed on the remote server.
 
 ---
@@ -49,20 +49,39 @@ In the VS Code Extension Marketplace, search for **"Terminal Input Assistant"** 
 2. Or use the global shortcut `Ctrl+Shift+I` (`Cmd+Shift+I` on Mac) to quickly open and focus the input box.
 3. Type your content in the clean input box.
 4. Sending options:
-   * **Ctrl+Enter**: Send text only.
-   * **Send + Enter ↵ Button**: Send text and automatically append a newline (Enter).
+   * **Ctrl+Enter** / **Send+Enter ↵ Button**: Send text and automatically append a newline (Enter). Ideal for executing commands.
+   * **Send Button**: Send text only, without a trailing newline. Ideal for filling in prompts that await further input.
    * **History List**: Successful inputs are saved in the history list. Click an item to re-send it instantly.
+
+### ⚙️ Configuration
+
+Search for `imeInput` in VS Code Settings (`Ctrl+,`):
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `imeInput.clearAfterSend` | `true` | Automatically clear the input box after a successful send. Set to `false` to keep the previous input. |
+
+### 🛠️ How it Works
+
+```text
+Local VS Code Client (GUI)
+  ├─ Input Assistant Panel (WebView) —— A safe buffer, fully compatible with OS IME.
+  │    └─ postMessage (Send clean text string)
+  └─ Extension Host (Local context)
+       └─ VS Code API: terminal.sendText() —— Bypass raw keystrokes, inject text directly.
+            └─ Target Terminal PTY (Local Shell or Remote-SSH Server)
+```
 
 ---
 
 <br>
-<h2 id="简体中文">🇨🇳 终端输入助手 (Terminal Input Assistant)</h2>
+<h2 id="zh-cn">🇨🇳 终端输入助手 (Terminal Input Assistant)</h2>
 
 为 VS Code 集成终端打造的安全输入缓冲区。从根本上解决在使用复杂的交互式 CLI 工具时，输入中文（及其他多字节字符）产生的乱码、吞字、退格错位等痛点。
 
 ### 🌟 核心痛点：为什么终端输入中文总是出问题？
 
-当您使用强交互式的 CLI 工具（例如 `claude code`, `vim`, `nano`，或者基于 `inquirer.js`, `prompt_toolkit` 等库构建的命令行程序）时，它们通常会将终端置于**“原始模式”（Raw Mode）**。在这种模式下，为了实现光标任意移动、语法高亮、自动补全等高级功能，工具必须**亲自接管**并逐字节地读取和处理输入流。
+当您使用强交互式的 CLI 工具（例如 `claude code`, `vim`, `nano`，或者基于 `inquirer.js`, `prompt_toolkit` 等库构建的命令行程序）时，它们通常会将终端置于**"原始模式"（Raw Mode）**。在这种模式下，为了实现光标任意移动、语法高亮、自动补全等高级功能，工具必须**亲自接管**并逐字节地读取和处理输入流。
 
 **问题的根源在于 CLI 工具本身：** 许多 CLI 工具底层的输入处理库，在处理多字节字符（如 UTF-8 编码的中日韩字符）或应对输入法（IME）组合过程中的复杂按键转义序列时，存在严重缺陷。
 当您通过输入法进行选词、回退（Backspace）、修改时，这些脆弱的 CLI 工具无法正确解析快速连续的字节流，从而导致：
@@ -85,7 +104,7 @@ In the VS Code Extension Marketplace, search for **"Terminal Input Assistant"** 
 *   **🎯 智能终端追踪**: 自动跟随当前激活的终端窗口，支持分屏终端，指哪打哪。
 *   **🔒 锁定目标终端**: 支持手动锁定目标终端。即使您的焦点切换到了代码编辑器或其他终端，输入面板的内容依然会准确发送到被锁定的目标中。
 *   **📜 历史记录管理**: 自动记录发送成功的文本。点击历史列表中的项即可一键重新发送，非常适合重复执行的命令。
-*   **⌨️ 快捷操作**: 支持 `Ctrl+Enter` 快速发送（适合参数输入），支持独立快捷键快速呼出面板。
+*   **⌨️ 快捷操作**: 支持 `Ctrl+Enter` 快速发送+回车，支持独立快捷键快速呼出面板。
 *   **💻 完美适配 Remote-SSH**: 插件强制运行在本地 Extension Host，完美衔接本地输入法，**无需**在远程服务器上进行任何安装或配置。
 
 ### 📦 安装与使用
@@ -97,8 +116,8 @@ In the VS Code Extension Marketplace, search for **"Terminal Input Assistant"** 
 1. 打开 VS Code 底部面板（通常在终端旁边），找到并点击 **"输入助手"** 选项卡。
 2. 或使用全局快捷键 `Ctrl+Shift+I`（Mac 下为 `Cmd+Shift+I`）快速打开并聚焦输入框。
 3. 输入内容后：
-   * **按下 Ctrl+Enter**：仅发送纯文本。
-   * **点击 "发送+回车 ↵" 按钮**：发送文本并自动执行换行（回车）。
+   * **Ctrl+Enter** / **"发送+回车 ↵" 按钮**：发送文本并自动执行换行（回车）。适合直接执行命令。
+   * **"发送" 按钮**：仅发送纯文本，不追加换行。适合填写等待后续输入的交互提示符。
    * **历史记录列表**：发送成功的文本会自动存入下方的历史列表，点击即可快速重复发送。
 
 ### ⚙️ 插件配置

@@ -3,6 +3,12 @@
   // VS Code WebView API
   const vscode = acquireVsCodeApi();
 
+  /** @type {Record<string, string>} */
+  const I18N = window.I18N || {};
+
+  /** @param {string} key @param {string} fallback */
+  function i(key, fallback) { return I18N[key] || fallback || key; }
+
   /** @type {HTMLSelectElement} */
   const terminalSelect = document.getElementById('terminalSelect');
   /** @type {HTMLButtonElement} */
@@ -61,7 +67,7 @@
       item.title = text;
       item.addEventListener('click', () => {
         vscode.postMessage({ command: 'sendWithEnter', text });
-        showStatus('已发送 ✓', 'success');
+        showStatus(i('webview.statusSent', 'Sent ✓'), 'success');
       });
       historyList.appendChild(item);
     });
@@ -92,9 +98,9 @@
     lockBtn.disabled = disabled;
 
     if (disabled) {
-      showStatus('没有可用的终端，请先打开一个终端', 'error', 0);
+      showStatus(i('webview.statusNoTerminal', 'No terminal available, please open one first'), 'error', 0);
     } else {
-      if (statusMsg.classList.contains('error') && statusMsg.textContent.includes('没有可用')) {
+      if (statusMsg.classList.contains('error') && statusMsg.textContent === i('webview.statusNoTerminal')) {
         statusMsg.textContent = '';
         statusMsg.className = 'status-msg';
       }
@@ -115,7 +121,7 @@
 
     const followOpt = document.createElement('option');
     followOpt.value = '__active__';
-    followOpt.textContent = '⚡ 跟随活动终端';
+    followOpt.textContent = i('webview.followActive', '⚡ Follow Active Terminal');
     terminalSelect.appendChild(followOpt);
 
     terminals.forEach(t => {
@@ -133,7 +139,9 @@
 
     lockBtn.textContent = locked ? '🔒' : '🔓';
     lockBtn.className = 'icon-btn' + (locked ? ' locked' : '');
-    lockBtn.title = locked ? '点击解锁，恢复跟随活动终端' : '点击锁定到当前终端';
+    lockBtn.title = locked
+      ? i('webview.unlockTitle', 'Click to unlock, resume following active terminal')
+      : i('webview.lockTitle', 'Click to lock to current terminal');
 
     updateControls();
   }
@@ -143,7 +151,7 @@
   function doSend(addNewLine) {
     const text = inputBox.value;
     if (!text.trim() && !text) {
-      showStatus('输入内容为空', 'error');
+      showStatus(i('webview.statusEmpty', 'Input is empty'), 'error');
       return;
     }
     lastSentText = text;
@@ -157,11 +165,11 @@
   addHistoryBtn.addEventListener('click', () => {
     const text = inputBox.value;
     if (!text.trim()) {
-      showStatus('输入内容为空', 'error');
+      showStatus(i('webview.statusEmpty', 'Input is empty'), 'error');
       return;
     }
     addToHistory(text);
-    showStatus('已加入历史 ✓', 'success');
+    showStatus(i('webview.statusAdded', 'Added to history ✓'), 'success');
   });
 
   inputBox.addEventListener('keydown', e => {
@@ -199,7 +207,7 @@
           inputBox.value = '';
         }
         inputBox.focus();
-        showStatus('已发送 ✓', 'success');
+        showStatus(i('webview.statusSent', 'Sent ✓'), 'success');
         break;
       case 'sendError':
         showStatus(msg.message, 'error');

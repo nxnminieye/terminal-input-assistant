@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { t } from '../i18n';
 
 interface TerminalInfo {
   id: string;
@@ -115,7 +116,7 @@ export class TerminalManager implements vscode.Disposable {
    */
   sendText(text: string, addNewLine = false): void {
     if (!this.currentTerminal) {
-      throw new Error('没有可用的终端，请先打开一个终端');
+    throw new Error(t('webview.statusNoTerminal'));
     }
     // 确保终端可见
     this.currentTerminal.show(true);
