@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'nonce-{{NONCE}}'; script-src 'nonce-{{NONCE}}';"
+  />
+  <title>中文输入助手</title>
+  <link rel="stylesheet" nonce="{{NONCE}}" href="{{STYLE_URI}}" />
+</head>
+<body>
+  <div class="container">
+    <!-- 终端选择栏 -->
+    <div class="terminal-bar">
+      <select id="terminalSelect" title="选择目标终端">
+        <option value="__active__">⚡ 跟随活动终端</option>
+      </select>
+      <button id="lockBtn" class="icon-btn" title="锁定/解锁终端">🔓</button>
+    </div>
+
+    <!-- 输入区域 -->
+    <div class="input-area">
+      <textarea
+        id="inputBox"
+        placeholder="在此输入中文，Ctrl+Enter 发送+回车..."
+        rows="4"
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="action-bar">
+      <button id="sendEnterBtn" class="btn btn-primary">发送+回车 (Ctrl+Enter)</button>
+      <button id="sendBtn" class="btn btn-secondary">发送</button>
+      <button id="addHistoryBtn" class="btn btn-secondary">加入历史</button>
+    </div>
+
+    <!-- 状态提示 -->
+    <div id="statusMsg" class="status-msg" aria-live="polite"></div>
+
+    <!-- 历史记录 -->
+    <div class="history-section">
+      <div class="history-header">历史记录</div>
+      <ul id="historyList" class="history-list"></ul>
+    </div>
+  </div>
+
+  <script nonce="{{NONCE}}" src="{{SCRIPT_URI}}"></script>
+</body>
+</html>

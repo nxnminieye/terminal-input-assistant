@@ -1,0 +1,62 @@
+{
+  "name": "terminal-input-assistant",
+  "displayName": "Terminal Input Assistant | 终端输入助手",
+  "description": "Safe input buffer for complex CLI tools in integrated terminal. 终端安全输入缓冲区，解决交互式 CLI 工具中文乱码与退格错位问题。",
+  "version": "0.2.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "extensionKind": ["ui"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "panel": [
+        {
+          "type": "webview",
+          "id": "imeInput.panel",
+          "name": "输入助手",
+          "visibility": "visible"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "imeInput.focus",
+        "title": "中文输入助手: 聚焦输入面板"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "imeInput.focus",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i"
+      }
+    ],
+    "configuration": {
+      "title": "中文输入助手",
+      "properties": {
+        "imeInput.clearAfterSend": {
+          "type": "boolean",
+          "default": true,
+          "description": "发送后自动清空输入框"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "node esbuild.js --production",
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.24.0"
+  }
+}

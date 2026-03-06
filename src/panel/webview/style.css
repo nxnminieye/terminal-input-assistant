@@ -1,0 +1,207 @@
+:root {
+  --radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--vscode-panel-background);
+  color: var(--vscode-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  padding: 8px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+
+/* 终端选择栏 */
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#terminalSelect {
+  flex: 1;
+  background: var(--vscode-dropdown-background);
+  color: var(--vscode-dropdown-foreground);
+  border: 1px solid var(--vscode-dropdown-border);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: var(--vscode-font-size);
+  cursor: pointer;
+  outline: none;
+}
+
+#terminalSelect:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+#terminalSelect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.icon-btn.locked {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+/* 输入区域 */
+.input-area {
+  flex: 1;
+}
+
+#inputBox {
+  width: 100%;
+  height: 100%;
+  min-height: 80px;
+  background: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border, transparent);
+  border-radius: var(--radius);
+  padding: 8px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  resize: vertical;
+  outline: none;
+  line-height: 1.5;
+}
+
+#inputBox:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+#inputBox::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+
+#inputBox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 操作按钮 */
+.action-bar {
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  flex: 1;
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: var(--vscode-font-size);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  flex: 2;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.btn-secondary {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+/* 状态提示 */
+.status-msg {
+  font-size: 12px;
+  min-height: 16px;
+  color: var(--vscode-descriptionForeground);
+  padding: 0 2px;
+}
+
+.status-msg.error {
+  color: var(--vscode-errorForeground);
+}
+
+.status-msg.success {
+  color: var(--vscode-terminal-ansiGreen);
+}
+
+/* 历史记录 */
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.history-header {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 2px;
+}
+
+.history-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.history-item {
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--vscode-list-inactiveSelectionBackground, transparent);
+  color: var(--vscode-foreground);
+  font-size: var(--vscode-font-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.1s;
+}
+
+.history-item:hover {
+  background: var(--vscode-list-hoverBackground);
+  color: var(--vscode-list-hoverForeground, var(--vscode-foreground));
+}
