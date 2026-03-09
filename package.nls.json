@@ -19,5 +19,7 @@
   "webview.statusEmpty": "Input is empty",
   "webview.statusNoTerminal": "No terminal available, please open one first",
   "webview.lockTitle": "Click to lock to current terminal",
-  "webview.unlockTitle": "Click to unlock, resume following active terminal"
+  "webview.unlockTitle": "Click to unlock, resume following active terminal",
+  "webview.favoriteBtn": "★ Favorite",
+  "webview.unfavoriteBtn": "Unfavorite"
 }

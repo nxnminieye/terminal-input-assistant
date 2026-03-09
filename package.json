@@ -2,15 +2,21 @@
   "name": "terminal-input-assistant",
   "displayName": "Terminal Input Assistant | 终端输入助手",
   "description": "%extension.description%",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publisher": "TerminalInputAssistant",
-  "icon": "media/logo.svg",
+  "icon": "media/logo.png",
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": ["Other"],
-  "extensionKind": ["ui"],
-  "activationEvents": ["onStartupFinished"],
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "views": {

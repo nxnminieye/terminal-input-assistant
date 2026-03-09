@@ -13,6 +13,7 @@ export class InputPanelProvider implements vscode.WebviewViewProvider {
   constructor(
     private readonly extensionUri: vscode.Uri,
     private readonly terminalManager: TerminalManager,
+    private readonly context: vscode.ExtensionContext,
   ) {
     // 监听终端状态变化，推送给前端
     terminalManager.onDidChange((terminals, activeTerminalId, isLocked) => {
@@ -48,7 +49,7 @@ export class InputPanelProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage(msg => this.handleMessage(msg));
   }
 
-  private handleMessage(msg: { command: string; text?: string; id?: string }): void {
+  private handleMessage(msg: { command: string; text?: string; id?: string; favorites?: string[] }): void {
     switch (msg.command) {
       case 'ready':
         // 推送初始状态
@@ -58,6 +59,16 @@ export class InputPanelProvider implements vscode.WebviewViewProvider {
           activeTerminalId: this.terminalManager.getActiveTerminalId(),
           isLocked: this.terminalManager.getLocked(),
         });
+        break;
+
+      case 'getFavorites': {
+        const favorites = this.context.globalState.get<string[]>('favorites', []);
+        this.postMessage({ type: 'favoritesLoaded', favorites });
+        break;
+      }
+
+      case 'saveFavorites':
+        this.context.globalState.update('favorites', msg.favorites ?? []);
         break;
 
       case 'send':
@@ -115,6 +126,7 @@ export class InputPanelProvider implements vscode.WebviewViewProvider {
       'webview.addHistoryBtn', 'webview.historyHeader', 'webview.statusSent',
       'webview.statusAdded', 'webview.statusEmpty', 'webview.statusNoTerminal',
       'webview.lockTitle', 'webview.unlockTitle',
+      'webview.favoriteBtn', 'webview.unfavoriteBtn',
     ];
     const i18nObj: Record<string, string> = {};
     i18nKeys.forEach(k => { i18nObj[k] = t(k); });

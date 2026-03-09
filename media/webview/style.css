@@ -189,19 +189,116 @@ body {
 }
 
 .history-item {
-  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
   border-radius: var(--radius);
+  border-left: 2px solid transparent;
   cursor: pointer;
   background: var(--vscode-list-inactiveSelectionBackground, transparent);
   color: var(--vscode-foreground);
   font-size: var(--vscode-font-size);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: background 0.1s;
+  transition: background 0.1s, border-color 0.1s;
 }
 
 .history-item:hover {
   background: var(--vscode-list-hoverBackground);
   color: var(--vscode-list-hoverForeground, var(--vscode-foreground));
+  border-left-color: var(--vscode-button-background);
+}
+
+.history-item-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item-del {
+  flex-shrink: 0;
+  display: none;
+  background: none;
+  border: none;
+  color: var(--vscode-descriptionForeground);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.history-item:hover .history-item-del {
+  display: block;
+}
+
+.history-item-del:hover {
+  opacity: 1;
+  color: var(--vscode-errorForeground);
+  background: var(--vscode-toolbar-hoverBackground, transparent);
+}
+
+/* 收藏项高亮 */
+.history-item.favorited {
+  border-left-color: #e8a000;
+}
+
+/* 收藏星形按钮 */
+.history-item-star {
+  flex-shrink: 0;
+  display: none;
+  background: none;
+  border: none;
+  color: var(--vscode-descriptionForeground);
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+.history-item:hover .history-item-star {
+  display: block;
+}
+
+.history-item-star.active {
+  display: block;
+  color: #e8a000;
+  opacity: 1;
+}
+
+.history-item-star:hover {
+  opacity: 1;
+  color: #e8a000;
+}
+
+/* 分隔线 */
+.history-separator {
+  height: 1px;
+  background: var(--vscode-panel-border, var(--vscode-editorGroup-border));
+  margin: 2px 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+/* 拖拽手柄 */
+.drag-handle {
+  flex-shrink: 0;
+  color: var(--vscode-descriptionForeground);
+  font-size: 13px;
+  line-height: 1;
+  cursor: grab;
+  opacity: 0.4;
+  user-select: none;
+}
+
+.history-item.favorited:hover .drag-handle {
+  opacity: 0.8;
+}
+
+/* 拖拽中样式 */
+.history-item.dragging {
+  opacity: 0.4;
 }

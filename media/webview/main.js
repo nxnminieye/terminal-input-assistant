@@ -35,15 +35,23 @@
   const MAX_HISTORY = 20;
   /** @type {string[]} */
   let history = [];
+  /** @type {string[]} */
+  let favorites = [];
 
   function loadHistory() {
     const state = vscode.getState();
     history = (state && state.history) || [];
     renderHistory();
+    // 同时请求收藏列表（永久存储，从 extension globalState 读取）
+    vscode.postMessage({ command: 'getFavorites' });
   }
 
   function saveHistory() {
     vscode.setState({ history });
+  }
+
+  function saveFavorites() {
+    vscode.postMessage({ command: 'saveFavorites', favorites });
   }
 
   /** @param {string} text */
@@ -58,19 +66,133 @@
     renderHistory();
   }
 
+  /** @param {string} text */
+  function toggleFavorite(text) {
+    const idx = favorites.indexOf(text);
+    if (idx === -1) {
+      favorites.unshift(text);
+    } else {
+      favorites.splice(idx, 1);
+    }
+    saveFavorites();
+    renderHistory();
+  }
+
+  // ─── 拖拽排序状态 ─────────────────────────────────────────────
+  let dragSrcIndex = -1;
+
   function renderHistory() {
     historyList.innerHTML = '';
-    history.forEach(text => {
-      const item = document.createElement('li');
-      item.className = 'history-item';
-      item.textContent = text;
-      item.title = text;
-      item.addEventListener('click', () => {
-        vscode.postMessage({ command: 'sendWithEnter', text });
-        showStatus(i('webview.statusSent', 'Sent ✓'), 'success');
-      });
+
+    // 渲染收藏区
+    favorites.forEach((text, idx) => {
+      const item = createHistoryItem(text, true, idx);
       historyList.appendChild(item);
     });
+
+    // 分隔线
+    if (favorites.length > 0 && history.filter(t => !favorites.includes(t)).length > 0) {
+      const sep = document.createElement('li');
+      sep.className = 'history-separator';
+      historyList.appendChild(sep);
+    }
+
+    // 渲染普通历史区（排除已收藏的）
+    history
+      .filter(text => !favorites.includes(text))
+      .forEach((text) => {
+        const item = createHistoryItem(text, false, -1);
+        historyList.appendChild(item);
+      });
+  }
+
+  /**
+   * @param {string} text
+   * @param {boolean} isFavorited
+   * @param {number} favIdx  收藏列表中的索引（非收藏项传 -1）
+   * @returns {HTMLLIElement}
+   */
+  function createHistoryItem(text, isFavorited, favIdx) {
+    const item = document.createElement('li');
+    item.className = 'history-item' + (isFavorited ? ' favorited' : '');
+    item.title = text;
+
+    // 拖拽手柄（仅收藏项）
+    if (isFavorited) {
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle';
+      handle.textContent = '⠿';
+      handle.title = '';
+      item.setAttribute('draggable', 'true');
+      item.dataset.favIdx = String(favIdx);
+
+      item.addEventListener('dragstart', e => {
+        dragSrcIndex = favIdx;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => item.classList.add('dragging'), 0);
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        dragSrcIndex = -1;
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+      });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        const targetIdx = favIdx;
+        if (dragSrcIndex === -1 || dragSrcIndex === targetIdx) { return; }
+        const [moved] = favorites.splice(dragSrcIndex, 1);
+        favorites.splice(targetIdx, 0, moved);
+        saveFavorites();
+        renderHistory();
+      });
+
+      item.appendChild(handle);
+    }
+
+    const textSpan = document.createElement('span');
+    textSpan.className = 'history-item-text';
+    textSpan.textContent = text;
+
+    // 收藏按钮
+    const starBtn = document.createElement('button');
+    starBtn.className = 'history-item-star' + (isFavorited ? ' active' : '');
+    starBtn.textContent = '★';
+    starBtn.title = isFavorited
+      ? i('webview.unfavoriteBtn', 'Unfavorite')
+      : i('webview.favoriteBtn', '★ Favorite');
+    starBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleFavorite(text);
+    });
+
+    // 删除按钮
+    const delBtn = document.createElement('button');
+    delBtn.className = 'history-item-del';
+    delBtn.textContent = '×';
+    delBtn.title = '';
+    delBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      // 从收藏和历史中同时删除
+      const fidx = favorites.indexOf(text);
+      if (fidx !== -1) { favorites.splice(fidx, 1); saveFavorites(); }
+      const hidx = history.indexOf(text);
+      if (hidx !== -1) { history.splice(hidx, 1); saveHistory(); }
+      renderHistory();
+    });
+
+    item.appendChild(textSpan);
+    item.appendChild(starBtn);
+    item.appendChild(delBtn);
+
+    item.addEventListener('click', () => {
+      vscode.postMessage({ command: 'sendWithEnter', text });
+      showStatus(i('webview.statusSent', 'Sent ✓'), 'success');
+    });
+
+    return item;
   }
 
   // ─── 状态显示 ────────────────────────────────────────────────
@@ -200,6 +322,10 @@
     switch (msg.type) {
       case 'updateTerminalList':
         renderTerminalList(msg.terminals, msg.activeTerminalId, msg.isLocked);
+        break;
+      case 'favoritesLoaded':
+        favorites = msg.favorites || [];
+        renderHistory();
         break;
       case 'sendSuccess':
         addToHistory(lastSentText);

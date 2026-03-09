@@ -7,7 +7,7 @@ export function activate(context: vscode.ExtensionContext): void {
   loadI18n(context.extensionPath);
 
   const terminalManager = new TerminalManager();
-  const provider = new InputPanelProvider(context.extensionUri, terminalManager);
+  const provider = new InputPanelProvider(context.extensionUri, terminalManager, context);
 
   context.subscriptions.push(
     terminalManager,

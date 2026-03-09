@@ -19,5 +19,7 @@
   "webview.statusEmpty": "输入内容为空",
   "webview.statusNoTerminal": "没有可用的终端，请先打开一个终端",
   "webview.lockTitle": "点击锁定到当前终端",
-  "webview.unlockTitle": "点击解锁，恢复跟随活动终端"
+  "webview.unlockTitle": "点击解锁，恢复跟随活动终端",
+  "webview.favoriteBtn": "★ 收藏",
+  "webview.unfavoriteBtn": "取消收藏"
 }
