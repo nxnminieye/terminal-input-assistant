@@ -2,7 +2,7 @@
   "name": "terminal-input-assistant",
   "displayName": "Terminal Input Assistant | 终端输入助手",
   "description": "%extension.description%",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "publisher": "TerminalInputAssistant",
   "icon": "media/logo.png",
   "engines": {
@@ -18,6 +18,18 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
+  "files": [
+    "dist/**",
+    "media/**",
+    "package.nls.json",
+    "package.nls.zh-cn.json",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nxnminieye/terminal-input-assistant.git"
+  },
   "contributes": {
     "views": {
       "panel": [
@@ -57,7 +69,7 @@
     "vscode:prepublish": "node esbuild.js --production",
     "build": "node esbuild.js",
     "watch": "node esbuild.js --watch",
-    "package": "vsce package"
+    "package": "vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",

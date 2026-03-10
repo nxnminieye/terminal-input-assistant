@@ -112,14 +112,15 @@ export class TerminalManager implements vscode.Disposable {
   /**
    * 发送文本到当前目标终端
    * @param text 要发送的文本
-   * @param addNewLine 是否追加换行
+   * @param addNewLine 是否追加执行回车
    */
   sendText(text: string, addNewLine = false): void {
     if (!this.currentTerminal) {
-    throw new Error(t('webview.statusNoTerminal'));
+      throw new Error(t('webview.statusNoTerminal'));
     }
     // 确保终端可见
     this.currentTerminal.show(true);
+    // 让 VS Code 终端 API 追加执行回车，避免 raw 模式程序把 CR/LF 当作粘贴文本处理。
     this.currentTerminal.sendText(text, addNewLine);
   }
 
